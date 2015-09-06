@@ -51,7 +51,7 @@ class til(webapp2.RequestHandler):
 
         # your hashtag or search query and tweet language (empty = all languages)
         hashtag = "#TIL"
-        tweetLanguage = ["en"]
+        tweetLanguage = "en"
 
 
         # retrieve last savepoint if available
@@ -64,7 +64,7 @@ class til(webapp2.RequestHandler):
             print "No savepoint found. Trying to get 30 results"
 
         timelineIterator = tweepy.Cursor(api.search, q=hashtag, \
-            since_id=savepoint, lang=tweetLanguage).items(10)
+            since_id=savepoint, lang=tweetLanguage).items(50)
 
         # put everything into a list to be able to sort/filter
         timeline = []
@@ -86,10 +86,11 @@ class til(webapp2.RequestHandler):
         # iterate the timeline and retweet
         for status in timeline:
             try:
-                print "(%(date)s) %(name)s: %(message)s\n" % \
-                    { "date" : status.created_at,
-                    "name" : status.author.screen_name.encode('utf-8'),
-                    "message" : status.text.encode('utf-8') }
+                # print "(%(date)s) %(name)s: %(message)s\n" % \
+                #     { "date" : status.created_at,
+                #     "name" : status.author.screen_name.encode('utf-8'),
+                #     "message" : status.text.encode('utf-8') }
+                print status.text.encode('utf-8')
 
                 api.retweet(status.id)
                 status.author.follow()
